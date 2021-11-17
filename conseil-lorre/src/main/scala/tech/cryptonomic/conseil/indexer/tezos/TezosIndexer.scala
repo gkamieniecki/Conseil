@@ -67,7 +67,7 @@ class TezosIndexer private (
 )(
     implicit
     system: ActorSystem,
-    materializer: ActorMaterializer,
+    materializer: Materializer,
     dispatcher: ExecutionContext
 ) extends LorreIndexer
     with LorreProgressLogging {
@@ -194,13 +194,13 @@ class TezosIndexer private (
   }
 
   /**
-   * Searches for fork between indexed head down to (head - depth) every [[interval]] of [[iteration]]
-   * @param maxIndexedLevel level of the currently indexed head
-   * @param depth how deep we look for forks from the current head
-   * @param interval every which iteration are we checking for forks
-   * @param iteration which iteration of main loop are we running
-   * @return
-   */
+    * Searches for fork between indexed head down to (head - depth) every [[interval]] of [[iteration]]
+    * @param maxIndexedLevel level of the currently indexed head
+    * @param depth how deep we look for forks from the current head
+    * @param interval every which iteration are we checking for forks
+    * @param iteration which iteration of main loop are we running
+    * @return
+    */
   private def processLastForks(
       maxIndexedLevel: BlockLevel,
       depth: Long,
@@ -326,7 +326,7 @@ object TezosIndexer extends ConseilLogSupport {
     val selectedNetwork = conf.network
 
     implicit val system: ActorSystem = ActorSystem("lorre-tezos-indexer")
-    implicit val materializer: ActorMaterializer = ActorMaterializer()
+    implicit val materializer: Materializer = ActorMaterializer()
     implicit val dispatcher: ExecutionContext = system.dispatcher
 
     val ignoreProcessFailuresOrigin: Option[String] = sys.env.get(LORRE_FAILURE_IGNORE_VAR)
