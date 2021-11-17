@@ -3,7 +3,7 @@ package tech.cryptonomic.conseil.api.routes.platform.discovery
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import cats.effect.IO
-import com.softwaremill.diffx.scalatest.DiffMatcher
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher._
 import com.typesafe.config.ConfigFactory
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.IntegrationPatience
@@ -35,11 +35,11 @@ class GenericPlatformDiscoveryOperationsTest
     with TezosInMemoryDatabaseSetup
     with BitcoinInMemoryDatabaseSetup
     with MockFactory
-    with DiffMatcher
     with IntegrationPatience {
 
   import slick.jdbc.PostgresProfile.api._
   import tech.cryptonomic.conseil.common.config.Platforms._
+  import com.softwaremill.diffx.generic.auto._
 
   implicit val ec = ExecutionContext.global
 
@@ -165,7 +165,7 @@ class GenericPlatformDiscoveryOperationsTest
 
   "getEntities (tezos)" should {
       "return list of entities for tezos blockchain" in {
-        sut.getEntities(NetworkPath("alphanet", PlatformPath("tezos"))).futureValue.toSet should matchTo(
+        sut.getEntities(NetworkPath("alphanet", PlatformPath("tezos"))).futureValue.toSet shouldMatchTo (
           Set(
             Entity("big_maps", "Big maps", 0),
             Entity("operations", "Operations", 0),
@@ -188,7 +188,7 @@ class GenericPlatformDiscoveryOperationsTest
 
   "getEntities (bitcoin)" should {
       "return list of entities for bitcoin blockchain" in {
-        sut.getEntities(NetworkPath("mainnet", PlatformPath("bitcoin"))).futureValue.toSet should matchTo(
+        sut.getEntities(NetworkPath("mainnet", PlatformPath("bitcoin"))).futureValue.toSet shouldMatchTo (
           Set(
             Entity("transactions", "Transactions", 0),
             Entity("blocks", "Blocks", 0),
@@ -204,7 +204,7 @@ class GenericPlatformDiscoveryOperationsTest
       val networkPath = NetworkPath("alphanet", PlatformPath("tezos"))
       "return list of attributes of Fees" in {
 
-        sut.getTableAttributes(EntityPath("fees", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("fees", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("low", "Low", DataType.Int, None, KeyType.NonKey, "fees"),
             Attribute("medium", "Medium", DataType.Int, None, KeyType.NonKey, "fees"),
@@ -220,7 +220,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of accounts" in {
-        sut.getTableAttributes(EntityPath("accounts", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("accounts", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("account_id", "Account id", DataType.String, None, KeyType.UniqueKey, "accounts"),
             Attribute("block_id", "Block id", DataType.String, None, KeyType.UniqueKey, "accounts"),
@@ -243,7 +243,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of blocks" in {
-        sut.getTableAttributes(EntityPath("blocks", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("blocks", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("level", "Level", DataType.LargeInt, None, KeyType.UniqueKey, "blocks"),
             Attribute("proto", "Proto", DataType.Int, None, KeyType.NonKey, "blocks"),
@@ -294,7 +294,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of operations" in {
-        sut.getTableAttributes(EntityPath("operations", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("operations", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("operation_id", "Operation id", DataType.Int, None, KeyType.UniqueKey, "operations"),
             Attribute(
@@ -390,7 +390,7 @@ class GenericPlatformDiscoveryOperationsTest
 
       "return list of attributes of operation groups" in {
 
-        sut.getTableAttributes(EntityPath("operation_groups", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("operation_groups", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("protocol", "Protocol", DataType.String, None, KeyType.NonKey, "operation_groups"),
             Attribute("chain_id", "Chain id", DataType.String, None, KeyType.NonKey, "operation_groups"),
@@ -414,7 +414,7 @@ class GenericPlatformDiscoveryOperationsTest
 
       "return list of attributes of bakers" in {
 
-        sut.getTableAttributes(EntityPath("bakers", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("bakers", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("pkh", "Pkh", DataType.String, None, KeyType.UniqueKey, "bakers"),
             Attribute("block_id", "Block id", DataType.String, None, KeyType.NonKey, "bakers"),
@@ -443,7 +443,7 @@ class GenericPlatformDiscoveryOperationsTest
 
       "return list of attributes of big maps" in {
 
-        sut.getTableAttributes(EntityPath("big_maps", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("big_maps", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("big_map_id", "Big map id", DataType.Decimal, None, KeyType.UniqueKey, "big_maps"),
             Attribute("key_type", "Key type", DataType.String, None, KeyType.NonKey, "big_maps"),
@@ -457,7 +457,7 @@ class GenericPlatformDiscoveryOperationsTest
 
       "return list of attributes of big map contents" in {
 
-        sut.getTableAttributes(EntityPath("big_map_contents", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("big_map_contents", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("big_map_id", "Big map id", DataType.Decimal, None, KeyType.UniqueKey, "big_map_contents"),
             Attribute("key", "Key", DataType.String, None, KeyType.UniqueKey, "big_map_contents"),
@@ -477,7 +477,14 @@ class GenericPlatformDiscoveryOperationsTest
             Attribute("cycle", "Cycle", DataType.Int, None, KeyType.NonKey, "big_map_contents"),
             Attribute("period", "Period", DataType.Int, None, KeyType.NonKey, "big_map_contents"),
             Attribute("fork_id", "Fork id", DataType.String, None, KeyType.UniqueKey, "big_map_contents"),
-            Attribute("invalidated_asof", "Invalidated asof", DataType.DateTime, None, KeyType.NonKey, "big_map_contents")
+            Attribute(
+              "invalidated_asof",
+              "Invalidated asof",
+              DataType.DateTime,
+              None,
+              KeyType.NonKey,
+              "big_map_contents"
+            )
           )
         )
       }
@@ -488,7 +495,7 @@ class GenericPlatformDiscoveryOperationsTest
           .getTableAttributes(EntityPath("originated_account_maps", networkPath))
           .futureValue
           .value
-          .toSet should matchTo(
+          .toSet shouldMatchTo (
           Set(
             Attribute("big_map_id", "Big map id", DataType.Decimal, None, KeyType.UniqueKey, "originated_account_maps"),
             Attribute("account_id", "Account id", DataType.String, None, KeyType.UniqueKey, "originated_account_maps")
@@ -505,7 +512,7 @@ class GenericPlatformDiscoveryOperationsTest
       val networkPath = NetworkPath("mainnet", PlatformPath("bitcoin"))
 
       "return list of attributes of blocks" in {
-        sut.getTableAttributes(EntityPath("blocks", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("blocks", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("hash", "Hash", DataType.String, None, KeyType.UniqueKey, "blocks"),
             Attribute("size", "Size", DataType.Int, None, KeyType.NonKey, "blocks"),
@@ -529,7 +536,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of transactions" in {
-        sut.getTableAttributes(EntityPath("transactions", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("transactions", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("txid", "Txid", DataType.String, None, KeyType.UniqueKey, "transactions"),
             Attribute("lock_time", "Lock time", DataType.DateTime, None, KeyType.NonKey, "transactions"),
@@ -547,7 +554,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of inputs" in {
-        sut.getTableAttributes(EntityPath("inputs", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("inputs", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("txid", "Txid", DataType.String, None, KeyType.NonKey, "inputs"),
             Attribute("output_txid", "Output txid", DataType.String, None, KeyType.NonKey, "inputs"),
@@ -565,7 +572,7 @@ class GenericPlatformDiscoveryOperationsTest
       }
 
       "return list of attributes of outputs" in {
-        sut.getTableAttributes(EntityPath("outputs", networkPath)).futureValue.value.toSet should matchTo(
+        sut.getTableAttributes(EntityPath("outputs", networkPath)).futureValue.value.toSet shouldMatchTo (
           Set(
             Attribute("txid", "Txid", DataType.String, None, KeyType.NonKey, "outputs"),
             Attribute("value", "Value", DataType.Decimal, None, KeyType.NonKey, "outputs"),
