@@ -106,16 +106,16 @@ object Dependencies {
     "org.julienrf" %% "endpoints-akka-http-server"    % Versions.endpoints
   )
 
-  private val tapirShared = Seq(
+  val tapirShared = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"       % Versions.tapir,
     "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.tapir
   )
-  private val tapirServer = Seq(
+  val tapirServer = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % Versions.tapir,
     "org.http4s"                  %% "http4s-dsl"          % Versions.http4s,
     "org.http4s"                  %% "http4s-ember-server" % Versions.http4s
   )
-  private val tapirClient = Seq(
+  val tapirClient = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
     "org.http4s"                  %% "http4s-ember-client" % Versions.http4s
   )
