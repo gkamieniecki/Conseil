@@ -20,7 +20,8 @@ object Dependencies {
     val postgres = "42.3.1"
 
     val endpoints = "0.15.0"
-    val tapir = "0.19.0-M16"
+    // val tapir = "0.19.0-M16"
+    val tapir = "0.19.0"
 
     val cats = "2.6.1"
     val catsEffect = "3.2.9"
