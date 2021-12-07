@@ -1,4 +1,6 @@
 package tech.cryptonomic.conseil.common.tezos
+
+import io.circe._
 // AUTO-GENERATED Slick data model
 /** Stand-alone Slick data model for immediate use */
 object Tables extends {
@@ -83,6 +85,16 @@ trait Tables {
       forkId: String,
       scriptHash: Option[String] = None
   )
+  import io.circe.generic.semiauto._
+  // implicit val accEnc = deriveEncoder[AccountsRow]
+  implicit val TimestampFormat: Encoder[java.sql.Timestamp] with Decoder[java.sql.Timestamp] =
+    new Encoder[java.sql.Timestamp] with Decoder[java.sql.Timestamp] {
+      override def apply(a: java.sql.Timestamp): Json = Encoder.encodeLong.apply(a.getTime)
+      override def apply(c: HCursor): Decoder.Result[java.sql.Timestamp] =
+        Decoder.decodeLong.map(s => new java.sql.Timestamp(s)).apply(c)
+    }
+
+  implicit val accountRowCodec = deriveCodec[AccountsRow]
 
   /** GetResult implicit for fetching AccountsRow objects using plain SQL queries */
   implicit def GetResultAccountsRow(
@@ -1879,6 +1891,8 @@ trait Tables {
       forkId: String
   )
 
+  implicit val blocksRowCodec = deriveCodec[BlocksRow]
+
   /** GetResult implicit for fetching BlocksRow objects using plain SQL queries */
   implicit def GetResultBlocksRow(
       implicit e0: GR[Long],
@@ -2821,6 +2835,7 @@ trait Tables {
       invalidatedAsof: Option[java.sql.Timestamp] = None,
       forkId: String
   )
+  implicit val operationGroupsRowCodec = deriveCodec[OperationGroupsRow]
 
   /** GetResult implicit for fetching OperationGroupsRow objects using plain SQL queries */
   implicit def GetResultOperationGroupsRow(
