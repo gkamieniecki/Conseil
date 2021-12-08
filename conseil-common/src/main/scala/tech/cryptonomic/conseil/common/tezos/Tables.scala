@@ -3041,6 +3041,7 @@ trait Tables {
       invalidatedAsof: Option[java.sql.Timestamp] = None,
       forkId: String
   )
+  implicit val operationsRowCodec = deriveCodec[OperationsRow]
 
   /** GetResult implicit for fetching OperationsRow objects using plain SQL queries */
   implicit def GetResultOperationsRow(
