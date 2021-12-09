@@ -52,6 +52,8 @@ object Dependencies {
     val bitcoin = "0.9.18-SNAPSHOT"
     val scrypto = "2.1.8"
     val scorex = "0.1.7"
+
+    val logback = "1.2.7"
   }
 
   private val config = Seq("com.typesafe" % "config" % Versions.typesafeConfig)
@@ -60,9 +62,11 @@ object Dependencies {
 
   private val scopt = Seq("com.github.scopt" %% "scopt" % Versions.scopt)
 
+  private val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
+
   private val scribe = Seq(
     "com.outr" %% "scribe"          % Versions.scribe,
-    "com.outr" %% "scribe-slf4j"    % Versions.scribe,
+    "com.outr" %% "scribe-slf4j"    % Versions.scribe % "provided",
     "com.outr" %% "scribe-logstash" % Versions.scribe
   )
 
@@ -109,7 +113,8 @@ object Dependencies {
 
   val tapirShared = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"       % Versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.tapir
+    "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.tapir,
+    logback
   )
   val tapirServer = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % Versions.tapir,
