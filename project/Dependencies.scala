@@ -20,7 +20,6 @@ object Dependencies {
     val postgres = "42.3.1"
 
     val endpoints = "0.15.0"
-    // val tapir = "0.19.0-M16"
     val tapir = "0.19.0"
 
     val cats = "2.6.1"
@@ -117,9 +116,10 @@ object Dependencies {
     logback
   )
   val tapirServer = Seq(
-    "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % Versions.tapir,
-    "org.http4s"                  %% "http4s-dsl"          % Versions.http4s,
-    "org.http4s"                  %% "http4s-ember-server" % Versions.http4s
+    "com.softwaremill.sttp.tapir" %% "tapir-http4s-server"     % Versions.tapir,
+    "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % Versions.tapir,
+    "org.http4s"                  %% "http4s-dsl"              % Versions.http4s,
+    "org.http4s"                  %% "http4s-ember-server"     % Versions.http4s
   )
   val tapirClient = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
